@@ -9,9 +9,9 @@ Gem::Specification.new do |s|
   s.version     = OmniAccount::VERSION
   s.authors     = ["Andersen Fan"]
   s.email       = ["as181920@gmail.com"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of OmniAccount."
-  s.description = "TODO: Description of OmniAccount."
+  s.homepage    = ""
+  s.summary     = "Common accounting for rails"
+  s.description = "Basic Bookkeeping for accounts with balance equation, without overkill abstractions"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
