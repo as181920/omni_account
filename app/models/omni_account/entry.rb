@@ -1,7 +1,7 @@
 module OmniAccount
   class Entry < ApplicationRecord
     belongs_to :origin, polymorphic: true
-    has_many :account_histories
+    has_many :account_histories, dependent: :restrict_with_exception
     has_many :accounts, through: :account_histories
 
     validates :uid, presence: true, uniqueness: true
