@@ -9,11 +9,13 @@ module OmniAccount
     validates :amount, presence: true, numericality: {other_than: 0}
     validates :balance, presence: true, numericality: true
 
-    validate :sequentiality_by_previous_link, on: :create
+    with_options on: :create do
+      validate :sequentiality_by_previous_link
 
-    before_validation :auto_set_previous, on: :create
-    before_validation :auto_calculate_balance, on: :create
-    after_save :update_account_balance
+      before_validation :auto_set_previous
+      before_validation :auto_calculate_balance
+    end
+    after_create :update_account_balance
 
     private
       def auto_set_previous
