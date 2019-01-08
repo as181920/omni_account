@@ -6,7 +6,6 @@ module OmniAccount
 
     validates :uid, presence: true, uniqueness: true
     validates_presence_of :origin_id, :origin
-    validates_uniqueness_of :origin_id, scope: :origin_type
 
     before_validation :auto_set_uid, on: :create
 
