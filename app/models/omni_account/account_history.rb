@@ -27,7 +27,7 @@ module OmniAccount
       end
 
       def update_account_balance
-        account.reload.update(balance: balance)
+        account.reload.update!(balance: balance)
       end
 
       def sequentiality_by_previous_link
