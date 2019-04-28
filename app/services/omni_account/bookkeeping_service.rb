@@ -1,3 +1,9 @@
+=begin
+TODO: add test cover
+case 1: account balance not updated when another process changed balance and matches calc balance in current transaction
+case 2: ensure data consistency with update! for account balance, without ! account balance may not updated
+end
+=end
 module OmniAccount
   class BookkeepingService
     EmptyTransfersError = Class.new StandardError
