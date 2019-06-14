@@ -40,7 +40,7 @@ module OmniAccount
 
       def perform_without_transaction
         entry = ::OmniAccount::Entry.create!(origin: origin, uid: uid, description: description)
-        histories = parsed_transfers.map { |transfer| entry.account_histories.create!(transfer) }
+        histories = parsed_transfers.map { |transfer| entry.account_histories.create!(transfer.tap{ |t| t.merge!(account_id: t.delete(:account).id) }) }
         histories.sum(&:amount).zero? ? true : raise(EntryHistroyAmountEquationError)
       end
 
@@ -55,7 +55,7 @@ module OmniAccount
           end
         end.tap do |transfers|
           raise EmptyTransfersError unless transfers.present?
-          raise InvalidTransferAccountError unless transfers.all?{ |t| t[:account].is_a?(::OmniAccount::Account) }
+          raise InvalidTransferAccountError unless transfers.all?{ |t| t[:account].class.name == "OmniAccount::Account" }
           raise InvalidTransferAmountError unless transfers.all?{ |t| t[:amount].is_a?(Numeric) && t[:amount].nonzero? }
           raise TransferAmountEquationError unless transfers.sum{ |t| t[:amount] }.zero?
         end
