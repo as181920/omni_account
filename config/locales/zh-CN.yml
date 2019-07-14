@@ -1,0 +1,7 @@
+---
+zh-CN:
+  activerecord:
+    attributes:
+      omni_account/account/name:
+        cash: "现金"
+        rebate: "佣金"
