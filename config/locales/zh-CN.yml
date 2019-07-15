@@ -5,3 +5,4 @@ zh-CN:
       omni_account/account/name:
         cash: "现金"
         rebate: "佣金"
+        withdraw: "提现"
