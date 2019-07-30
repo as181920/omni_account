@@ -5,13 +5,12 @@ module OmniAccount
     belongs_to :previous, class_name: self.name, foreign_key: :previous_id, optional: true
     has_one :next, class_name: self.name, foreign_key: :previous_id
 
-    validates_presence_of :account_id, :account, :entry_id, :entry
+    validates_presence_of :account_id, :entry_id, :previous_id
     validates :amount, presence: true, numericality: {other_than: 0}
     validates :balance, presence: true, numericality: true
+    validates_uniqueness_of :previous_id, scope: :account_id
 
     with_options on: :create do
-      validate :sequentiality_by_previous_link
-
       before_validation :auto_set_previous
       before_validation :auto_calculate_balance
     end
@@ -19,7 +18,7 @@ module OmniAccount
 
     private
       def auto_set_previous
-        self.previous = account&.histories&.last
+        self.previous_id = account&.histories&.last&.id || 0
       end
 
       def auto_calculate_balance
@@ -28,14 +27,6 @@ module OmniAccount
 
       def update_account_balance
         account.update!(balance: balance)
-      end
-
-      def sequentiality_by_previous_link
-        if account&.histories&.exists?
-          errors.add(:previous_id, "Must have previous link to the last history of account") unless account.histories.where("previous_id >= ?", previous_id).empty? && previous&.account.eql?(self.account)
-        else
-          errors.add(:previous_id, "Must be nil as first history of account") if previous_id.present?
-        end
       end
   end
 end

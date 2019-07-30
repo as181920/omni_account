@@ -2,7 +2,7 @@
 TODO: add test cover
 case 1: account balance not updated when another process changed balance and matches calc balance in current transaction
 case 2: ensure data consistency with update! for account balance, without ! account balance may not updated
-end
+case 3: concurrently create first history record of an account
 =end
 module OmniAccount
   class BookkeepingService
