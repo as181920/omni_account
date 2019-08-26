@@ -4,6 +4,7 @@ zh-CN:
     attributes:
       omni_account/account/name:
         cash: "现金"
+        ec_income: "电商收款"
         rebate: "佣金"
         manual_deposit: "人工充值"
         withdraw: "提现"
