@@ -2,6 +2,10 @@
 zh-CN:
   activerecord:
     attributes:
+      omni_account/account:
+        balance: "账户余额"
+      omni_account/account_history:
+        balance: "余额"
       omni_account/account/name:
         cash: "现金"
         ec_income: "电商收款"
