@@ -18,3 +18,21 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActiveSupport::TestCase.file_fixture_path = ActiveSupport::TestCase.fixture_path + "/files"
   ActiveSupport::TestCase.fixtures :all
 end
+
+require "factory_bot_rails"
+require "database_cleaner"
+require "minitest/reporters"
+
+DatabaseCleaner.strategy = :truncation
+Minitest::Reporters.use!
+class ActiveSupport::TestCase
+  include FactoryBot::Syntax::Methods
+
+  setup do
+    DatabaseCleaner.start
+  end
+
+  teardown do
+    DatabaseCleaner.clean
+  end
+end
