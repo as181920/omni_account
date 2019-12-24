@@ -1,5 +1,6 @@
 FactoryBot.define do
-  factory :omni_account_entry, class: 'Entry' do
-    
+
+  factory :entry, class: 'OmniAccount::Entry' do
+    association :origin, factory: :account
   end
 end

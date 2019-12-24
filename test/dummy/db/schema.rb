@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_30_045724) do
+ActiveRecord::Schema.define(version: 2019_12_24_085914) do
 
   create_table "omni_account_account_histories", force: :cascade do |t|
     t.integer "account_id"
@@ -45,6 +45,12 @@ ActiveRecord::Schema.define(version: 2019_07_30_045724) do
     t.datetime "created_at", null: false
     t.index ["origin_type", "origin_id"], name: "index_omni_account_entries_on_origin_type_and_origin_id"
     t.index ["uid"], name: "index_omni_account_entries_on_uid", unique: true
+  end
+
+  create_table "tenants", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
