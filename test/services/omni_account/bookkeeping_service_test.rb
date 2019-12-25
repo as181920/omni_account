@@ -53,23 +53,59 @@ module OmniAccount
       end
     end
 
-    # test "concurrently create history for one account" do
-    #   new_account = create(:account)
-    #   exception = assert_raises ActiveRecord::RecordInvalid do
-    #     threads = 20.times.map do |idx|
-    #       Thread.new do
-    #         OmniAccount::BookkeepingService.new([ [@credit_account, -1], [new_account, 1] ], @credit_account).perform
-    #       end
-    #     end
-    #     threads.each(&:join)
-    #   end
-    #   assert_equal "Validation failed: Previous has already been taken", exception.message
-    #   assert_equal 0, OmniAccount::Account.sum(:balance)
-    # end
+    test "concurrently create history for one account" do
+      new_account = create(:account)
+      exception = assert_raises ActiveRecord::RecordInvalid do
+        threads = 20.times.map do |idx|
+          Thread.new do
+            OmniAccount::BookkeepingService.new([ [@credit_account, -1], [new_account, 1] ], @credit_account).perform
+          end
+        end
+        threads.each(&:join)
+      end
+      assert_equal "Validation failed: Previous has already been taken", exception.message
+      assert_equal 0, OmniAccount::Account.sum(:balance)
+    end
 
     test "concurrently transactions result in original balance" do
-      OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform
-      OmniAccount::BookkeepingService.new([ [@debit_account, -1], [@credit_account, 1] ], @debit_account).perform
+      # OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform
+      # OmniAccount::BookkeepingService.new([ [@debit_account, -1], [@credit_account, 1] ], @debit_account).perform
+
+      OmniAccount::BookkeepingService.new([ [@credit_account, -10000], [@debit_account, 10000] ], @credit_account).perform
+
+      
+        threads1 = 2.times.map do |idx|
+          Thread.new do
+
+
+            begin
+              OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform 
+            rescue
+              retry
+            end
+
+             
+            # puts OmniAccount::Account.find(@credit_account.id).inspect
+          end
+        end
+
+        threads2 = 2.times.map do |idx|
+
+          Thread.new do
+            begin
+              OmniAccount::BookkeepingService.new([ [@debit_account, -1], [@credit_account, 1] ], @debit_account).perform
+            rescue
+              retry
+            end
+            
+            # puts OmniAccount::Account.find(@credit_account.id).inspect
+          end
+        end
+        
+        [threads1, threads2].flatten.each(&:join)
+
+
+
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
   end
