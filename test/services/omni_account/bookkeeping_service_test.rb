@@ -55,12 +55,15 @@ module OmniAccount
 
     test "concurrently create history for one account" do
       new_account = create(:account)
-      threads = 2.times.map do |idx|
-        Thread.new do
-          OmniAccount::BookkeepingService.new([ [@credit_acount, -1], [new_account, 1] ], @credit_acount).perform
+      exception = assert_raises ActiveRecord::RecordInvalid do
+        threads = 20.times.map do |idx|
+          Thread.new do
+            OmniAccount::BookkeepingService.new([ [@credit_acount, -1], [new_account, 1] ], @credit_acount).perform
+          end
         end
+        threads.each(&:join)
       end
-      threads.each(&:join)
+      assert_equal "Validation failed: Previous has already been taken", exception.message
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
   end

@@ -7,14 +7,18 @@ module OmniAccount
 
     validates_presence_of :account_id, :entry_id, :previous_id
     validates :amount, presence: true, numericality: {other_than: 0}
-    validates :balance, presence: true, numericality: true
     validates_uniqueness_of :previous_id, scope: :account_id
+    # validates :balance, presence: true, numericality: true
+    validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :debit?
+    validates_numericality_of :balance, less_than_or_equal_to: 0, if: :credit?
 
     with_options on: :create do
       before_validation :auto_set_previous
       before_validation :auto_calculate_balance
     end
     after_create :update_account_balance
+
+    delegate :debit?, :credit?, to: :account
 
     private
       def auto_set_previous
