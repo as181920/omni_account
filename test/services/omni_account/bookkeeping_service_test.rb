@@ -15,6 +15,7 @@ module OmniAccount
         ],
         @credit_account
       ).perform
+      assert_equal 2, @debit_account.reload.balance
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
 
@@ -68,43 +69,18 @@ module OmniAccount
     end
 
     test "concurrently transactions result in original balance" do
-      # OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform
-      # OmniAccount::BookkeepingService.new([ [@debit_account, -1], [@credit_account, 1] ], @debit_account).perform
-
       OmniAccount::BookkeepingService.new([ [@credit_account, -10000], [@debit_account, 10000] ], @credit_account).perform
-
-      
-        threads1 = 2.times.map do |idx|
-          Thread.new do
-
-
-            begin
-              OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform 
-            rescue
-              retry
-            end
-
-             
-            # puts OmniAccount::Account.find(@credit_account.id).inspect
-          end
+      threads1 = 1000.times.map do |idx|
+        Thread.new do
+          OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform rescue retry
         end
-
-        threads2 = 2.times.map do |idx|
-
-          Thread.new do
-            begin
-              OmniAccount::BookkeepingService.new([ [@debit_account, -1], [@credit_account, 1] ], @debit_account).perform
-            rescue
-              retry
-            end
-            
-            # puts OmniAccount::Account.find(@credit_account.id).inspect
-          end
+      end
+      threads2 = 1000.times.map do |idx|
+        Thread.new do
+          OmniAccount::BookkeepingService.new([ [@debit_account, -1], [@credit_account, 1] ], @debit_account).perform rescue retry
         end
-        
-        [threads1, threads2].flatten.each(&:join)
-
-
+      end
+      [threads1, threads2].flatten.each(&:join)
 
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
