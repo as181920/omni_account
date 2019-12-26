@@ -12,10 +12,13 @@
 
 ActiveRecord::Schema.define(version: 2019_12_24_085914) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "omni_account_account_histories", force: :cascade do |t|
-    t.integer "account_id"
-    t.integer "entry_id"
-    t.integer "previous_id"
+    t.bigint "account_id"
+    t.bigint "entry_id"
+    t.bigint "previous_id"
     t.decimal "amount", precision: 12, scale: 2, null: false
     t.decimal "balance", precision: 12, scale: 2, null: false
     t.text "description"
@@ -27,7 +30,7 @@ ActiveRecord::Schema.define(version: 2019_12_24_085914) do
 
   create_table "omni_account_accounts", force: :cascade do |t|
     t.string "holder_type"
-    t.integer "holder_id"
+    t.bigint "holder_id"
     t.string "name"
     t.integer "normal_balance"
     t.decimal "balance", precision: 12, scale: 2, default: "0.0", null: false
@@ -39,7 +42,7 @@ ActiveRecord::Schema.define(version: 2019_12_24_085914) do
 
   create_table "omni_account_entries", force: :cascade do |t|
     t.string "origin_type"
-    t.integer "origin_id"
+    t.bigint "origin_id"
     t.string "uid"
     t.text "description"
     t.datetime "created_at", null: false

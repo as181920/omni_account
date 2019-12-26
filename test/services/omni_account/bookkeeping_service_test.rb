@@ -55,33 +55,27 @@ module OmniAccount
     end
 
     test "concurrently create history for one account" do
-      new_account = create(:account)
-      exception = assert_raises ActiveRecord::RecordInvalid do
-        threads = 20.times.map do |idx|
-          Thread.new do
-            OmniAccount::BookkeepingService.new([ [@credit_account, -1], [new_account, 1] ], @credit_account).perform
+      assert_raises ActiveRecord::RecordNotUnique do
+        OmniAccount::Account.transaction do
+          threads = 2.times.map do
+            Thread.new { OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform }
           end
+          threads.each(&:join)
         end
-        threads.each(&:join)
       end
-      assert_equal "Validation failed: Previous has already been taken", exception.message
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
 
     test "concurrently transactions result in original balance" do
       OmniAccount::BookkeepingService.new([ [@credit_account, -10000], [@debit_account, 10000] ], @credit_account).perform
-      threads1 = 1000.times.map do |idx|
-        Thread.new do
-          OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform rescue retry
-        end
-      end
-      threads2 = 1000.times.map do |idx|
-        Thread.new do
-          OmniAccount::BookkeepingService.new([ [@debit_account, -1], [@credit_account, 1] ], @debit_account).perform rescue retry
-        end
-      end
-      [threads1, threads2].flatten.each(&:join)
 
+      OmniAccount::Account.transaction do
+        entry = ::OmniAccount::Entry.create!(origin: @credit_account, uid: SecureRandom.uuid, description: "")
+        @debit_account.reload
+        Thread.new{ OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_account, 1] ], @credit_account).perform }.join
+        entry.account_histories.create!({account: @debit_account, amount: -1})
+        entry.account_histories.create!({account: @credit_account, amount: 1})
+      end
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
   end

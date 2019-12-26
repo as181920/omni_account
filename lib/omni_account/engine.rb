@@ -1,3 +1,5 @@
+Bundler.require(:default, Rails.env)
+
 module OmniAccount
   class Engine < ::Rails::Engine
     isolate_namespace OmniAccount

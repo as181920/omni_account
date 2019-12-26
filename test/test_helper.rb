@@ -24,6 +24,7 @@ DatabaseCleaner.strategy = :truncation
 Minitest::Reporters.use!
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
+  self.use_transactional_tests = false
 
   setup do
     DatabaseCleaner.start

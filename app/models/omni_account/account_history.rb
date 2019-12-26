@@ -30,7 +30,7 @@ module OmniAccount
       end
 
       def update_account_balance
-        account.update!(balance: balance)
+        account.reload.update!(balance: balance)
       end
   end
 end

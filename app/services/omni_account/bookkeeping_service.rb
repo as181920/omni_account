@@ -1,9 +1,3 @@
-=begin
-TODO: add test cover
-case 1: account balance not updated when another process changed balance and matches calc balance in current transaction
-case 2: ensure data consistency with update! for account balance, without ! account balance may not updated
-case 3: concurrently create first history record of an account
-=end
 module OmniAccount
   class BookkeepingService
     EmptyTransfersError = Class.new StandardError
@@ -40,7 +34,7 @@ module OmniAccount
 
       def perform_without_transaction
         entry = ::OmniAccount::Entry.create!(origin: origin, uid: uid, description: description)
-        histories = parsed_transfers.map { |transfer| entry.account_histories.create!(transfer.tap{ |t| t.merge!(account_id: t.delete(:account).id) }) }
+        histories = parsed_transfers.map { |transfer| entry.account_histories.create!(transfer) }
         histories.sum(&:amount).zero? ? true : raise(EntryHistroyAmountEquationError)
       end
 
