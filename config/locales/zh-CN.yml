@@ -7,9 +7,10 @@ zh-CN:
       omni_account/account_history:
         balance: "余额"
       omni_account/account/name:
-        cash: "现金账户"
-        fund: "按量计费账户"
+        cash: "资金账户"
+        deduct: "服务计费账户"
         ec_income: "电商收款"
+        ec_refund: "电商退款"
         ec_commission: "电商佣金"
         rebate: "佣金"
         manual_deposit: "人工充值"
