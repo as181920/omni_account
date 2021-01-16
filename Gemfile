@@ -13,3 +13,8 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+
+group :development, :test do
+  gem 'redlock'
+  gem 'with_advisory_lock'
+end

@@ -159,6 +159,9 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    redis (4.1.4)
+    redlock (1.2.1)
+      redis (>= 3.0.0, < 5.0)
     ruby-progressbar (1.10.1)
     shellany (0.0.1)
     sprockets (4.0.2)
@@ -175,6 +178,8 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    with_advisory_lock (4.6.0)
+      activerecord (>= 4.2)
     zeitwerk (2.4.2)
 
 PLATFORMS
@@ -189,6 +194,8 @@ DEPENDENCIES
   minitest-reporters
   omni_account!
   pg
+  redlock
+  with_advisory_lock
 
 BUNDLED WITH
-   1.17.3
+   2.1.4
