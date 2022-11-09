@@ -12,6 +12,7 @@ zh-CN:
         ec_income: "电商收款"
         ec_refund: "电商退款"
         ec_commission: "电商佣金"
+        ec_promotion: "推广佣金"
         rebate: "佣金"
         manual_deposit: "人工充值"
         withdraw: "提现"
