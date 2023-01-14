@@ -1,5 +1,7 @@
 ---
 zh-CN:
+  omni_account:
+    insufficient_balance: "余额不足"
   activerecord:
     attributes:
       omni_account/account:
