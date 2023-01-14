@@ -15,7 +15,6 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActiveSupport::TestCase.fixtures :all
 end
 
-require "byebug"
 require "factory_bot_rails"
 require "database_cleaner"
 require "minitest/reporters"

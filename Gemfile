@@ -11,10 +11,8 @@ gemspec
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 
-# To use a debugger
-# gem 'byebug', group: [:development, :test]
-
 group :development, :test do
+  gem 'debug'
   gem 'redlock'
   gem 'with_advisory_lock'
 end
