@@ -21,8 +21,9 @@ module OmniAccount
     delegate :debit?, :credit?, to: :account
 
     private
+
       def auto_set_previous
-        self.previous_id = account&.histories&.last&.id || 0
+        self.previous_id = account&.histories.where.not(id: nil)&.last&.id || 0
       end
 
       def auto_calculate_balance
