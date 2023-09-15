@@ -20,6 +20,10 @@ module OmniAccount
 
     delegate :debit?, :credit?, to: :account
 
+    def self.ransackable_attributes(_auth_object = nil)
+      %w[amount description]
+    end
+
     private
 
       def auto_set_previous

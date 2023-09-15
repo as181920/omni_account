@@ -3,7 +3,7 @@ require "benchmark"
 require "with_advisory_lock"
 
 module OmniAccount
-  class BookkeepingPerformanceTest < ActiveSupport::TestCase
+  class BookkeepingPerformanceWithAdvisoryLockTest < ActiveSupport::TestCase
     setup do
       @credit_account = create(:account, normal_balance: :credit)
       @debit_accounts = 5.times.map { create(:account) }

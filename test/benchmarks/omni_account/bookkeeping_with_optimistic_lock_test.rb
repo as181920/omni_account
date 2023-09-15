@@ -2,7 +2,7 @@ require "test_helper"
 require "benchmark"
 
 module OmniAccount
-  class BookkeepingPerformanceTest < ActiveSupport::TestCase
+  class BookkeepingPerformanceWithOptimisticLoctTest < ActiveSupport::TestCase
     setup do
       @credit_account = create(:account, normal_balance: :credit)
       @debit_accounts = 5.times.map { create(:account) }
