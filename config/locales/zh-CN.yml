@@ -3,6 +3,9 @@ zh-CN:
   omni_account:
     insufficient_balance: "余额不足"
   activerecord:
+    models:
+      omni_account/account: "账户"
+      omni_account/account_history: "账户资金明细"
     attributes:
       omni_account/account:
         balance: "账户余额"
