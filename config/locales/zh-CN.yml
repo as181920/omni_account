@@ -4,8 +4,8 @@ zh-CN:
     insufficient_balance: "余额不足"
   activerecord:
     models:
-      omni_account/account: "账户"
-      omni_account/account_history: "账户资金明细"
+      omni_account/account: "资金账户"
+      omni_account/account_history: "账户流水"
     attributes:
       omni_account/account:
         balance: "账户余额"
@@ -14,11 +14,14 @@ zh-CN:
       omni_account/account/name:
         cash: "资金账户"
         deduct: "服务计费账户"
-        ec_income: "电商收款"
+        billing: "计费账户"
+        ec_income: "电商代收"
         ec_refund: "电商退款"
         ec_commission: "电商佣金"
         ec_promotion: "推广佣金"
         rebate: "佣金"
         manual_deposit: "人工充值"
         withdraw: "提现"
+        withdrawal: "资金提现"
+        ec_withdrawal: "电商收款"
         channel_fee_expense: "支付渠道费"

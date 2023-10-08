@@ -4,7 +4,7 @@ en:
     insufficient_balance: "Not enough"
   activerecord:
     models:
-      omni_account/account: "Account"
+      omni_account/account: "Fund Account"
       omni_account/account_history: "Transaction"
     attributes:
       omni_account/account:
@@ -13,7 +13,8 @@ en:
         balance: "Balance"
       omni_account/account/name:
         cash: "Cash"
-        deduct: "fee"
+        deduct: "Fee"
+        billing: "Billing"
         ec_income: "EcIncome"
         ec_refund: "EcRefund"
         ec_commission: "EcCommission"
@@ -22,4 +23,5 @@ en:
         manual_deposit: "ManualRecharge"
         withdraw: "withdraw"
         withdrawal: "withdrawal"
+        ec_withdrawal: "EC withdrawal"
         channel_fee_expense: "ChannelFee"
