@@ -9,8 +9,14 @@ en:
     attributes:
       omni_account/account:
         balance: "Balance"
+        created_at: "Created at"
+        updated_at: "Updated at"
       omni_account/account_history:
+        id: "ID"
+        amount: "Amount"
         balance: "Balance"
+        description: "Description"
+        created_at: "Created at"
       omni_account/account/name:
         cash: "Cash"
         deduct: "Fee"

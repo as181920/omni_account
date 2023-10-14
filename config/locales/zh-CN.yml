@@ -9,8 +9,14 @@ zh-CN:
     attributes:
       omni_account/account:
         balance: "账户余额"
+        created_at: "创建于"
+        updated_at: "更新于"
       omni_account/account_history:
+        id: "ID"
+        amount: "金额"
         balance: "余额"
+        description: "内容"
+        created_at: "创建时间"
       omni_account/account/name:
         cash: "资金账户"
         deduct: "服务计费账户"
