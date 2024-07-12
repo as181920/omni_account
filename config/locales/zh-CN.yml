@@ -11,6 +11,7 @@ zh-CN:
         balance: "账户余额"
         created_at: "创建于"
         updated_at: "更新于"
+        holder: "账户方"
       omni_account/account_history:
         id: "ID"
         amount: "金额"
