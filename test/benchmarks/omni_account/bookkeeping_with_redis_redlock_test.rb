@@ -18,7 +18,7 @@ module OmniAccount
             loop do
               begin
                 DistributedLock.lock!("temp_redlock_name", 2000) do
-                  OmniAccount::BookkeepingService.new([ [@credit_account, -1], [@debit_accounts[idx], 1] ], @credit_account).perform
+                  OmniAccount::BookkeepingService.new([[@credit_account, -1], [@debit_accounts[idx], 1]], @credit_account).perform
                 end
                 break if @credit_account.balance < -1000
               rescue => e

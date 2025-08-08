@@ -1,19 +1,33 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-# Declare your gem's dependencies in omni_account.gemspec.
-# Bundler will treat runtime dependencies like base dependencies, and
-# development dependencies will be added by default to the :development group.
 gemspec
 
-# Declare any dependencies that are still in development here instead of in
-# your gemspec. These might include edge Rails or gems from your path or
-# Git. Remember to move these dependencies to your gemspec before releasing
-# your gem to rubygems.org.
+gem "debug"
+gem "rubocop"
+gem "rubocop-erb"
+gem "rubocop-minitest"
+gem "rubocop-rails-omakase"
+gem "rubocop-rake"
 
-group :development, :test do
-  gem 'debug'
-  gem 'propshaft'
-  gem 'redlock'
-  gem 'with_advisory_lock'
+gem "database_cleaner"
+gem "factory_bot_rails"
+gem "guard"
+gem "guard-bundler"
+gem "guard-minitest"
+gem "guard-rubocop"
+gem "minitest"
+gem "minitest-reporters"
+gem "mocha"
+gem "pg"
+gem "propshaft"
+gem "puma"
+
+gem "redlock"
+gem "with_advisory_lock"
+
+group :test do
+  gem "capybara"
+  gem "selenium-webdriver"
+  gem "webmock"
 end

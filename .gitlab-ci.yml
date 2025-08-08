@@ -1,0 +1,25 @@
+before_script:
+  - pwd
+  - rvm use || rvm install $(<.ruby-version)
+  - ruby -v
+  - bundle install -j $(nproc)
+
+stages:
+  - rubocop
+  - test
+
+rubocop:
+  stage: rubocop
+  when: always
+  script:
+    - bin/rails rubocop
+
+test:
+  stage: test
+  only:
+    - master
+  script:
+    - bundle install -j $(nproc)
+    - ln -s /home/gitlab-runner/shared/configs/as_projects/omni_engines/omni_account/database.yml ./test/dummy/config/database.yml
+    - bin/rails db:reset RAILS_ENV=test
+    - bin/rails test test/{models,services}

@@ -8,14 +8,14 @@ module OmniAccount
 
     attr_accessor :transfers, :origin, :uid, :description
 
-    def initialize(transfers=[], origin=nil, options={})
+    def initialize(transfers = [], origin = nil, options = {})
       @transfers = transfers
       @origin = origin
       @uid = options[:uid]
       @description = options[:description]
     end
 
-    def perform(options={})
+    def perform(options = {})
       Rails.logger.info "Bookkeeping : #{self.to_json}"
 
       if options[:transaction] == false
@@ -41,7 +41,7 @@ module OmniAccount
       def parsed_transfers
         transfers.map do |transfer|
           if transfer.is_a?(Array)
-            HashWithIndifferentAccess.new.tap{ |h| h[:account], h[:amount], h[:description] = transfer }
+            HashWithIndifferentAccess.new.tap { |h| h[:account], h[:amount], h[:description] = transfer }
           elsif transfer.is_a?(Hash)
             HashWithIndifferentAccess.new(transfer).slice(:account, :amount, :description)
           else
@@ -49,9 +49,9 @@ module OmniAccount
           end
         end.tap do |transfers|
           raise EmptyTransfersError unless transfers.present?
-          raise InvalidTransferAccountError unless transfers.all?{ |t| t[:account].class.name == "OmniAccount::Account" }
-          raise InvalidTransferAmountError unless transfers.all?{ |t| t[:amount].is_a?(Numeric) && t[:amount].nonzero? }
-          raise TransferAmountEquationError unless transfers.sum{ |t| t[:amount] }.zero?
+          raise InvalidTransferAccountError unless transfers.all? { |t| t[:account].class.name == "OmniAccount::Account" }
+          raise InvalidTransferAmountError unless transfers.all? { |t| t[:amount].is_a?(Numeric) && t[:amount].nonzero? }
+          raise TransferAmountEquationError unless transfers.sum { |t| t[:amount] }.zero?
         end
       end
   end

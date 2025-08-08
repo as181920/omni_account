@@ -17,11 +17,4 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency "rails", ">= 6.1"
-
-  s.add_development_dependency "pg"
-  s.add_development_dependency "factory_bot_rails"
-  s.add_development_dependency "database_cleaner"
-  s.add_development_dependency "minitest-reporters"
-  s.add_development_dependency "guard"
-  s.add_development_dependency "guard-minitest"
 end

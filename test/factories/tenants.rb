@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :tenant, class: "Tenant" do
-    name { 'TenantName' }
+    name { "TenantName" }
   end
 end

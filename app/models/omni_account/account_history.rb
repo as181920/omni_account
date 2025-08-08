@@ -6,7 +6,7 @@ module OmniAccount
     has_one :next, class_name: self.name, foreign_key: :previous_id
 
     validates_presence_of :account_id, :entry_id, :previous_id
-    validates :amount, presence: true, numericality: {other_than: 0}
+    validates :amount, presence: true, numericality: { other_than: 0 }
     validates_uniqueness_of :previous_id, scope: :account_id
     # validates :balance, presence: true, numericality: true
     validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :debit?

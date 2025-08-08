@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class OmniAccount::Test < ActiveSupport::TestCase
   setup do
