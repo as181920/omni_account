@@ -5,14 +5,14 @@ zh-CN:
   activerecord:
     models:
       omni_account/account: "资金账户"
-      omni_account/account_history: "账户流水"
+      omni_account/posting: "账户流水"
     attributes:
       omni_account/account:
         balance: "账户余额"
         created_at: "创建于"
         updated_at: "更新于"
         holder: "账户方"
-      omni_account/account_history:
+      omni_account/posting:
         id: "ID"
         amount: "金额"
         balance: "余额"

@@ -1,5 +1,5 @@
 module OmniAccount
-  class AccountHistory < ApplicationRecord
+  class Posting < ApplicationRecord
     belongs_to :account
     belongs_to :entry
     belongs_to :previous, class_name: self.name, foreign_key: :previous_id, optional: true
@@ -27,7 +27,7 @@ module OmniAccount
     private
 
       def auto_set_previous
-        self.previous_id = account&.histories.where.not(id: nil)&.last&.id || 0
+        self.previous_id = account&.postings.where.not(id: nil)&.last&.id || 0
       end
 
       def auto_calculate_balance

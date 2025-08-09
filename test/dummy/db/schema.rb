@@ -10,22 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2019_12_24_085914) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_09_070331) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
-  create_table "omni_account_account_histories", force: :cascade do |t|
-    t.bigint "account_id"
-    t.bigint "entry_id"
-    t.bigint "previous_id"
-    t.decimal "amount", precision: 12, scale: 2, null: false
-    t.decimal "balance", precision: 12, scale: 2, null: false
-    t.text "description"
-    t.datetime "created_at", precision: nil, null: false
-    t.index ["account_id"], name: "index_omni_account_account_histories_on_account_id"
-    t.index ["entry_id"], name: "index_omni_account_account_histories_on_entry_id"
-    t.index ["previous_id", "account_id"], name: "index_omni_account_histories_on_previous_and_account", unique: true
-  end
+  enable_extension "pg_catalog.plpgsql"
 
   create_table "omni_account_accounts", force: :cascade do |t|
     t.string "holder_type"
@@ -49,12 +36,25 @@ ActiveRecord::Schema[7.0].define(version: 2019_12_24_085914) do
     t.index ["uid"], name: "index_omni_account_entries_on_uid", unique: true
   end
 
+  create_table "omni_account_postings", force: :cascade do |t|
+    t.bigint "account_id"
+    t.bigint "entry_id"
+    t.bigint "previous_id"
+    t.decimal "amount", precision: 12, scale: 2, null: false
+    t.decimal "balance", precision: 12, scale: 2, null: false
+    t.text "description"
+    t.datetime "created_at", precision: nil, null: false
+    t.index ["account_id"], name: "index_omni_account_postings_on_account_id"
+    t.index ["entry_id"], name: "index_omni_account_postings_on_entry_id"
+    t.index ["previous_id", "account_id"], name: "index_omni_account_postings_on_previous_and_account", unique: true
+  end
+
   create_table "tenants", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  add_foreign_key "omni_account_account_histories", "omni_account_accounts", column: "account_id"
-  add_foreign_key "omni_account_account_histories", "omni_account_entries", column: "entry_id"
+  add_foreign_key "omni_account_postings", "omni_account_accounts", column: "account_id"
+  add_foreign_key "omni_account_postings", "omni_account_entries", column: "entry_id"
 end

@@ -1,8 +1,8 @@
 module OmniAccount
   class Account < ApplicationRecord
     belongs_to :holder, polymorphic: true
-    has_many :histories, class_name: "::OmniAccount::AccountHistory"
-    has_many :entries, through: :histories
+    has_many :postings
+    has_many :entries, through: :postings
 
     enum :normal_balance, [:debit, :credit]
 

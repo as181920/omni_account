@@ -9,7 +9,7 @@ module OmniAccount
         find_or_initialize_by(name: name).tap { |account| account.update!(normal_balance: (options[:normal_balance].presence || "debit")) if account.new_record? }
       end
     end
-    has_many :account_histories, through: :accounts, source: :histories
+    has_many :postings, through: :accounts, source: :postings
   end
 
   class_methods do

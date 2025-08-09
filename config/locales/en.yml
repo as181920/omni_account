@@ -5,14 +5,14 @@ en:
   activerecord:
     models:
       omni_account/account: "Fund Account"
-      omni_account/account_history: "Transaction"
+      omni_account/posting: "Transaction"
     attributes:
       omni_account/account:
         balance: "Balance"
         created_at: "Created at"
         updated_at: "Updated at"
         holder: "Holder"
-      omni_account/account_history:
+      omni_account/posting:
         id: "ID"
         amount: "Amount"
         balance: "Balance"

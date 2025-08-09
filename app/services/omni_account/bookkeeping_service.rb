@@ -27,8 +27,8 @@ module OmniAccount
 
       def post_double_entry
         entry = ::OmniAccount::Entry.create!(origin: origin, uid: uid, description: description)
-        histories = parsed_transfers.map { |transfer| entry.account_histories.create!(transfer) }
-        histories.sum(&:amount).zero? ? true : raise(EntryHistroyAmountEquationError)
+        postings = parsed_transfers.map { |transfer| entry.postings.create!(transfer) }
+        postings.sum(&:amount).zero? ? true : raise(EntryHistroyAmountEquationError)
       end
 
       def parsed_transfers

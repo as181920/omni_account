@@ -54,7 +54,7 @@ module OmniAccount
       end
     end
 
-    test "concurrently create history for one account" do
+    test "concurrently create postings for one account" do
       assert_raises ActiveRecord::RecordNotUnique, PG::UniqueViolation do
         OmniAccount::Account.transaction do
           threads = 2.times.map do
@@ -73,8 +73,8 @@ module OmniAccount
         entry = ::OmniAccount::Entry.create!(origin: @credit_account, uid: SecureRandom.uuid, description: "")
         @debit_account.reload
         Thread.new { OmniAccount::BookkeepingService.new([[@credit_account, -1], [@debit_account, 1]], @credit_account).perform }.join
-        entry.account_histories.create!({ account: @debit_account, amount: -1 })
-        entry.account_histories.create!({ account: @credit_account, amount: 1 })
+        entry.postings.create!({ account: @debit_account, amount: -1 })
+        entry.postings.create!({ account: @credit_account, amount: 1 })
       end
 
       assert_equal 0, OmniAccount::Account.sum(:balance)
