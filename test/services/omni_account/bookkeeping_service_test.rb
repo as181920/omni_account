@@ -54,18 +54,6 @@ module OmniAccount
       end
     end
 
-    test "concurrently create postings for one account" do
-      assert_raises ActiveRecord::RecordNotUnique, PG::UniqueViolation do
-        OmniAccount::Account.transaction do
-          threads = 2.times.map do
-            Thread.new { OmniAccount::BookkeepingService.new([[@credit_account, -1], [@debit_account, 1]], @credit_account).perform }
-          end
-          threads.each(&:join)
-        end
-      end
-      assert_equal 0, OmniAccount::Account.sum(:balance)
-    end
-
     test "concurrently transactions result in original balance" do
       OmniAccount::BookkeepingService.new([[@credit_account, -10000], [@debit_account, 10000]], @credit_account).perform
 
@@ -77,6 +65,24 @@ module OmniAccount
         entry.postings.create!({ account: @credit_account, amount: 1 })
       end
 
+      assert_equal 0, OmniAccount::Account.sum(:balance)
+    end
+
+    test "concurrently create postings for one account result in raise exception" do
+      capture_io do
+        barrier = Concurrent::CyclicBarrier.new(2)
+        assert_raises ActiveRecord::RecordNotUnique, PG::UniqueViolation do
+          OmniAccount::Account.transaction do
+            threads = 2.times.map do
+              Thread.new do
+                barrier.wait
+                OmniAccount::BookkeepingService.new([[@credit_account, -1], [@debit_account, 1]], @credit_account).perform
+              end
+            end
+            threads.each(&:join)
+          end
+        end
+      end
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
   end
