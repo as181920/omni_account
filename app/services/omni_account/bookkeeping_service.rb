@@ -15,24 +15,17 @@ module OmniAccount
       @description = options[:description]
     end
 
-    def perform(options = {})
+    def perform
       Rails.logger.info "Bookkeeping : #{self.to_json}"
 
-      if options[:transaction] == false
-        perform_without_transaction
-      else
-        perform_with_transaction
+      ::OmniAccount::Account.transaction do
+        post_double_entry
       end
     end
 
     private
-      def perform_with_transaction
-        ::OmniAccount::Account.transaction do
-          perform_without_transaction
-        end
-      end
 
-      def perform_without_transaction
+      def post_double_entry
         entry = ::OmniAccount::Entry.create!(origin: origin, uid: uid, description: description)
         histories = parsed_transfers.map { |transfer| entry.account_histories.create!(transfer) }
         histories.sum(&:amount).zero? ? true : raise(EntryHistroyAmountEquationError)
