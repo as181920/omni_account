@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_09_070331) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_20_062116) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -22,8 +22,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_09_070331) do
     t.decimal "balance", precision: 12, scale: 2, default: "0.0", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.string "code"
+    t.text "description"
+    t.bigint "parent_id"
     t.index ["holder_id", "holder_type", "name"], name: "index_omni_account_accounts_on_holder_and_name", unique: true
     t.index ["normal_balance"], name: "index_omni_account_accounts_on_normal_balance"
+    t.index ["parent_id"], name: "index_omni_account_accounts_on_parent_id"
   end
 
   create_table "omni_account_entries", force: :cascade do |t|

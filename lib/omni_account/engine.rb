@@ -1,3 +1,6 @@
+require "kaminari"
+require "ransack"
+
 module OmniAccount
   class Engine < ::Rails::Engine
     isolate_namespace OmniAccount
