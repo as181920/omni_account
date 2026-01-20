@@ -12,9 +12,13 @@ gem "rubocop-rake"
 
 gem "database_cleaner"
 gem "factory_bot_rails"
+gem "brakeman", require: false
+gem "bundler-audit", require: false
 gem "guard"
+gem "guard-brakeman"
 gem "guard-bundler"
-gem "guard-minitest"
+gem "guard-minitest", github: "guard/guard-minitest"
+gem "guard-rake"
 gem "guard-rubocop"
 gem "minitest"
 gem "minitest-reporters"

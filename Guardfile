@@ -27,6 +27,18 @@ guard :bundler do
   files.each { |file| watch(helper.real_path(file)) }
 end
 
+guard :rake, task: 'bundle:audit:check' do
+  watch("Gemfile")
+  watch("Gemfile.lock")
+end
+
+guard :brakeman, quiet: true, run_on_start: true do
+  watch(%r{^app/.+\.(erb|haml|rhtml|rb)$})
+  watch(%r{^config/.+\.rb$})
+  watch(%r{^lib/.+\.rb$})
+  watch("Gemfile")
+end
+
 guard :rubocop, cli: ["--format", "fuubar"], cmd: "./bin/rubocop" do
   watch(/.+\.rb$/)
   watch(%r{^app/views/(.+)/.+})
