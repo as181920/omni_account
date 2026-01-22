@@ -13,6 +13,9 @@ module OmniAccount
     validates_uniqueness_of :code, scope: [:holder_id, :holder_type], allow_blank: true
     validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :debit?
     validates_numericality_of :balance, less_than_or_equal_to: 0, if: :credit?
+    validate :holder_must_match_parent_holder
+
+    before_validation :set_initial_attrs, on: :create
 
     scope :roots, -> { where(parent_id: nil) }
 
@@ -54,5 +57,21 @@ module OmniAccount
     def level
       parent ? parent.level + 1 : 0
     end
+
+    def total_balance
+      balance + children.sum { |c| c.total_balance }
+    end
+
+    private
+
+      def set_initial_attrs
+        self.holder ||= parent&.holder
+      end
+
+      def holder_must_match_parent_holder
+        return if parent.nil? || (holder == parent.holder)
+
+        errors.add(:holder, "must match parent's holder")
+      end
   end
 end

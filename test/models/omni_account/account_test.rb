@@ -11,15 +11,15 @@ module OmniAccount
 
     test "child account level should be 1" do
       parent = create(:account)
-      child = create(:account, parent: parent)
+      child = create(:account, parent_account: parent)
 
       assert_equal 1, child.level
     end
 
     test "nested account level should be 2" do
       grandparent = create(:account)
-      parent = create(:account, parent: grandparent)
-      child = create(:account, parent: parent)
+      parent = create(:account, parent_account: grandparent)
+      child = create(:account, parent_account: parent)
 
       assert_equal 2, child.level
     end
@@ -51,6 +51,23 @@ module OmniAccount
       account2 = create(:account, holder: tenant2, code: "CODE123")
 
       assert_predicate account2, :valid?
+    end
+
+    test "should calculate total balance includes children balances" do
+      account = create(:account, balance: 1)
+      sub_account = create(:account, parent_account: account, balance: 2)
+      _deep_account = create(:account, parent_account: sub_account, balance: 3.3)
+
+      assert_equal 6.3.to_d, account.total_balance
+    end
+
+    test "child account holder must match parent holder" do
+      parent = create(:account)
+      different_holder = create(:tenant)
+      child = build(:account, parent: parent, holder: different_holder)
+
+      assert_not child.valid?
+      assert_includes child.errors[:holder], "must match parent's holder"
     end
   end
 end

@@ -5,5 +5,16 @@ FactoryBot.define do
     sequence :name do |n|
       "account_#{n}"
     end
+
+    transient do
+      parent_account { nil }
+    end
+
+    after(:build) do |account, evaluator|
+      if evaluator.parent_account
+        account.parent = evaluator.parent_account
+        account.holder = evaluator.parent_account.holder
+      end
+    end
   end
 end
