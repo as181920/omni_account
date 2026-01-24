@@ -3,7 +3,7 @@ module OmniAccount
     belongs_to :holder, polymorphic: true
     belongs_to :parent, class_name: name, optional: true
     has_many :children, class_name: name, foreign_key: :parent_id, inverse_of: :parent, dependent: nil
-    has_many :postings
+    has_many :postings, dependent: :restrict_with_error
     has_many :entries, through: :postings
 
     enum :normal_balance, [:debit, :credit]
