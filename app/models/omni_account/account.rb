@@ -19,6 +19,8 @@ module OmniAccount
 
     scope :roots, -> { where(parent_id: nil) }
 
+    delegate :to_s, to: :name
+
     class << self
       def ransackable_attributes(_auth_object = nil)
         %w[name code description holder_type holder_id parent_id normal_balance balance]

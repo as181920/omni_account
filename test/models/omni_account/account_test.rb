@@ -2,6 +2,13 @@ require "test_helper"
 
 module OmniAccount
   class AccountTest < ActiveSupport::TestCase
+    # to_s
+    test "should delegate to_s to name" do
+      account = create(:account)
+
+      assert_equal account.to_s, account.name
+    end
+
     # tree structure
     test "root account level should be 0" do
       account = create(:account)
