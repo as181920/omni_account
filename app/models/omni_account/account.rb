@@ -38,6 +38,12 @@ module OmniAccount
       end
     end
 
+    def indented_code
+      return code if code.blank?
+
+      "#{'　' * level}#{code}"
+    end
+
     def indented_name
       "#{'　' * level}#{name}"
     end
