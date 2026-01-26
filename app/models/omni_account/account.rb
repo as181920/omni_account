@@ -38,6 +38,14 @@ module OmniAccount
       end
     end
 
+    def indented_name
+      "#{'　' * level}#{name}"
+    end
+
+    def display_label
+      "#{'　' * level}#{[code, name].compact_blank.join(' - ')}"
+    end
+
     def root
       node = self
       node = node.parent while node.parent
@@ -71,7 +79,7 @@ module OmniAccount
 
     def parent_select_options
       self.class.where(holder:).where.not(id: self_and_descendants.pluck(:id).compact_blank).tree_ordered.map do |acct|
-        ["#{'　' * acct.level}#{[acct.code, acct.name].compact_blank.join(' - ')}", acct.id]
+        [acct.display_label, acct.id]
       end
     end
 
