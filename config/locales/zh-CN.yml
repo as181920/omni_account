@@ -12,6 +12,15 @@ zh-CN:
         created_at: "创建于"
         updated_at: "更新于"
         holder: "账户方"
+        normal_balance: "余额方向"
+        code: "编号"
+        name: "名称"
+        description: "描述"
+        parent: "上级"
+        position: "序号"
+      omni_account/account/normal_balance:
+        debit: "借"
+        credit: "贷"
       omni_account/posting:
         id: "ID"
         amount: "金额"

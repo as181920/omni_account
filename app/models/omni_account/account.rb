@@ -18,6 +18,7 @@ module OmniAccount
     before_validation :set_initial_attrs, on: :create
 
     scope :roots, -> { where(parent_id: nil) }
+    scope :tree_ordered, -> { order(Arel.sql("NULLIF(code, '') NULLS LAST"), Arel.sql("COALESCE(parent_id, id)"), :id) }
 
     delegate :to_s, to: :name
 

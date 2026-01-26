@@ -12,6 +12,15 @@ en:
         created_at: "Created at"
         updated_at: "Updated at"
         holder: "Holder"
+        normal_balance: "Normal Balance"
+        code: "Code"
+        name: "Name"
+        description: "Description"
+        parent: "Parent Account"
+        position: "Position"
+      omni_account/account/normal_balance:
+        debit: "Debit"
+        credit: "Credit"
       omni_account/posting:
         id: "ID"
         amount: "Amount"
