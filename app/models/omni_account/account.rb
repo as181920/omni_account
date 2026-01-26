@@ -14,8 +14,10 @@ module OmniAccount
     validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :debit?
     validates_numericality_of :balance, less_than_or_equal_to: 0, if: :credit?
     validate :holder_must_match_parent_holder
+    validate :parent_must_not_create_cycle, if: :will_save_change_to_parent_id?
 
     before_validation :set_initial_attrs, on: :create
+    before_save :clear_level_cache, if: :will_save_change_to_parent_id?
 
     scope :roots, -> { where(parent_id: nil) }
     scope :tree_ordered, -> { order(Arel.sql("NULLIF(code, '') NULLS LAST"), Arel.sql("COALESCE(parent_id, id)"), :id) }
@@ -51,18 +53,26 @@ module OmniAccount
       node
     end
 
-    def all_children
-      children.flat_map do |child|
-        child.all_children << child
-      end
+    def level
+      @level ||= parent ? parent.level + 1 : 0
     end
 
-    def level
-      parent ? parent.level + 1 : 0
+    def descendants
+      children.flat_map { |child| [child, *child.descendants] }
+    end
+
+    def self_and_descendants
+      [self] + descendants
     end
 
     def total_balance
-      balance + children.sum { |c| c.total_balance }
+      self_and_descendants.sum(&:balance)
+    end
+
+    def parent_select_options
+      self.class.where(holder:).where.not(id: self_and_descendants.pluck(:id).compact_blank).tree_ordered.map do |acct|
+        ["#{'　' * acct.level}#{[acct.code, acct.name].compact_blank.join(' - ')}", acct.id]
+      end
     end
 
     private
@@ -75,6 +85,21 @@ module OmniAccount
         return if parent.nil? || (holder == parent.holder)
 
         errors.add(:holder, "must match parent's holder")
+      end
+
+      def parent_must_not_create_cycle
+        return if parent_id.blank?
+
+        node = parent
+        while node
+          errors.add(:parent_id, "parent cannot be self or descendants") && break if node.id == id
+          node = node.parent
+        end
+      end
+
+      def clear_level_cache
+        @level = nil
+        children.each(&:clear_level_cache)
       end
   end
 end
