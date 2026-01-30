@@ -18,11 +18,14 @@ module OmniAccount
     end
     after_create :update_account_balance
 
-    delegate :debit?, :credit?, to: :account
+    delegate :debit?, :credit?, to: :account, prefix: true
 
     def self.ransackable_attributes(_auth_object = nil)
       %w[amount description]
     end
+
+    def debit? = amount.positive?
+    def credit? = amount.negative?
 
     private
 
