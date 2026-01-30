@@ -9,8 +9,8 @@ module OmniAccount
     validates :amount, presence: true, numericality: { other_than: 0 }
     validates_uniqueness_of :previous_id, scope: :account_id
     # validates :balance, presence: true, numericality: true
-    validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :debit?
-    validates_numericality_of :balance, less_than_or_equal_to: 0, if: :credit?
+    validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :account_debit?
+    validates_numericality_of :balance, less_than_or_equal_to: 0, if: :account_credit?
 
     with_options on: :create do
       before_validation :auto_set_previous
