@@ -20,8 +20,14 @@ module OmniAccount
 
     delegate :debit?, :credit?, to: :account, prefix: true
 
-    def self.ransackable_attributes(_auth_object = nil)
-      %w[amount description]
+    class << self
+      def ransackable_attributes(_auth_object = nil)
+        %w[id acount_id entry_id previous_id amount balance description created_at]
+      end
+
+      def ransackable_associations(_auth_object = nil)
+        %w[account entry previous next]
+      end
     end
 
     def debit? = amount.positive?

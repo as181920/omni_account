@@ -30,7 +30,7 @@ module OmniAccount
       end
 
       def ransackable_associations(_auth_object = nil)
-        %w[parent postings entries]
+        %w[holder parent postings entries]
       end
 
       def ransackable_scopes(_auth_object = nil)

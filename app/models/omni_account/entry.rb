@@ -9,7 +9,18 @@ module OmniAccount
 
     before_validation :auto_set_uid, on: :create
 
+    class << self
+      def ransackable_attributes(_auth_object = nil)
+        %w[id origin_type origin_id uid description created_at]
+      end
+
+      def ransackable_associations(_auth_object = nil)
+        %w[origin postings accounts]
+      end
+    end
+
     private
+
       def auto_set_uid
         self.uid ||= generate_uid
       end
