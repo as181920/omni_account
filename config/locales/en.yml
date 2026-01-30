@@ -23,6 +23,7 @@ en:
         credit: "Credit"
       omni_account/entry:
         description: "Description"
+        created_at: "Posting Time"
       omni_account/posting:
         id: "ID"
         amount: "Amount"

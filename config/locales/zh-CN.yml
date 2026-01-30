@@ -23,6 +23,7 @@ zh-CN:
         credit: "贷"
       omni_account/entry:
         description: "描述"
+        created_at: "入账时间"
       omni_account/posting:
         id: "ID"
         amount: "金额"
