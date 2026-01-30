@@ -21,6 +21,8 @@ en:
       omni_account/account/normal_balance:
         debit: "Debit"
         credit: "Credit"
+      omni_account/entry:
+        description: "Description"
       omni_account/posting:
         id: "ID"
         amount: "Amount"

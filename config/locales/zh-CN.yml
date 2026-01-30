@@ -21,6 +21,8 @@ zh-CN:
       omni_account/account/normal_balance:
         debit: "借"
         credit: "贷"
+      omni_account/entry:
+        description: "描述"
       omni_account/posting:
         id: "ID"
         amount: "金额"
