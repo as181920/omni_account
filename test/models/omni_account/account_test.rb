@@ -31,6 +31,28 @@ module OmniAccount
       assert_equal 2, child.level
     end
 
+    test "full_name joins current and ancestor names from root to leaf" do
+      root = create(:account, name: "assets")
+      child = create(:account, name: "cash", parent_account: root)
+      leaf = create(:account, name: "bank", parent_account: child)
+
+      assert_equal "assets_cash_bank", leaf.full_name
+    end
+
+    test "display_name combines code and full_name with underscore" do
+      root = create(:account, name: "assets")
+      child = create(:account, name: "cash", parent_account: root, code: "1001")
+
+      assert_equal "1001 assets_cash", child.display_name
+    end
+
+    test "display_name returns full_name when code is blank" do
+      root = create(:account, name: "assets")
+      child = create(:account, name: "cash", parent_account: root, code: "")
+
+      assert_equal "assets_cash", child.display_name
+    end
+
     # codable
     test "code can be nil" do
       account = create(:account, code: nil)
@@ -39,7 +61,7 @@ module OmniAccount
     end
 
     test "code can be empty and duplicate" do
-      account1 = create(:account, code: "")
+      _account1 = create(:account, code: "")
       account2 = create(:account, code: "")
 
       assert_predicate account2, :valid?

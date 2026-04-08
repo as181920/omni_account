@@ -52,6 +52,22 @@ module OmniAccount
       "#{'　' * level}#{[code, name].compact_blank.join(' - ')}"
     end
 
+    def full_name
+      node = self
+      names = []
+
+      while node
+        names.unshift(node.name)
+        node = node.parent
+      end
+
+      names.join("_")
+    end
+
+    def display_name
+      [code, full_name].compact_blank.join(" ")
+    end
+
     def root
       node = self
       node = node.parent while node.parent
