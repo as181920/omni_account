@@ -16,6 +16,7 @@ zh-CN:
         code: "编号"
         name: "名称"
         description: "描述"
+        allow_contra_balance: "允许反向余额"
         parent: "上级"
         position: "序号"
       omni_account/account/normal_balance:
