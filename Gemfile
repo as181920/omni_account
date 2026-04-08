@@ -12,7 +12,7 @@ gem "rubocop-rake"
 
 gem "database_cleaner"
 gem "factory_bot_rails"
-gem "brakeman", require: false
+gem "brakeman", "< 8.0.0", require: false
 gem "bundler-audit", require: false
 gem "guard"
 gem "guard-brakeman"
