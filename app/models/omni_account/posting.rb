@@ -9,8 +9,8 @@ module OmniAccount
     validates :amount, presence: true, numericality: { other_than: 0 }
     validates_uniqueness_of :previous_id, scope: :account_id
     # validates :balance, presence: true, numericality: true
-    validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :account_debit?
-    validates_numericality_of :balance, less_than_or_equal_to: 0, if: :account_credit?
+    validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :account_debit_balance_sign_enforced?
+    validates_numericality_of :balance, less_than_or_equal_to: 0, if: :account_credit_balance_sign_enforced?
 
     with_options on: :create do
       before_validation :auto_set_previous
@@ -45,6 +45,14 @@ module OmniAccount
 
       def update_account_balance
         account.reload.update!(balance: balance)
+      end
+
+      def account_debit_balance_sign_enforced?
+        account_debit? && account.enforce_normal_balance_sign?
+      end
+
+      def account_credit_balance_sign_enforced?
+        account_credit? && account.enforce_normal_balance_sign?
       end
   end
 end

@@ -31,6 +31,7 @@ gem "redlock"
 gem "with_advisory_lock"
 
 group :test do
+  gem "benchmark"
   gem "capybara"
   gem "selenium-webdriver"
   gem "webmock"

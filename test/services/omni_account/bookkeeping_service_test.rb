@@ -54,6 +54,20 @@ module OmniAccount
       end
     end
 
+    test "allows contra balance posting when account explicitly enabled" do
+      contra_debit_account = create(:account, normal_balance: :debit, allow_contra_balance: true)
+
+      assert OmniAccount::BookkeepingService.new(
+        [
+          [contra_debit_account, -1, "contra"],
+          [@debit_account, 1, "counter"]
+        ],
+        @debit_account
+      ).perform
+
+      assert_equal(-1.to_d, contra_debit_account.reload.balance)
+    end
+
     test "concurrently transactions result in original balance" do
       OmniAccount::BookkeepingService.new([[@credit_account, -10000], [@debit_account, 10000]], @credit_account).perform
 

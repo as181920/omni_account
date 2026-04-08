@@ -11,8 +11,8 @@ module OmniAccount
     validates_presence_of :holder_id, :holder, :name, :normal_balance
     validates_uniqueness_of :name, scope: [:holder_id, :holder_type]
     validates_uniqueness_of :code, scope: [:holder_id, :holder_type], allow_blank: true
-    validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :debit?
-    validates_numericality_of :balance, less_than_or_equal_to: 0, if: :credit?
+    validates_numericality_of :balance, greater_than_or_equal_to: 0, if: :debit_balance_sign_enforced?
+    validates_numericality_of :balance, less_than_or_equal_to: 0, if: :credit_balance_sign_enforced?
     validate :holder_must_match_parent_holder
     validate :parent_must_not_create_cycle, if: :will_save_change_to_parent_id?
 
@@ -26,7 +26,7 @@ module OmniAccount
 
     class << self
       def ransackable_attributes(_auth_object = nil)
-        %w[name code description holder_type holder_id parent_id normal_balance balance]
+        %w[name code description holder_type holder_id parent_id normal_balance balance allow_contra_balance]
       end
 
       def ransackable_associations(_auth_object = nil)
@@ -99,6 +99,10 @@ module OmniAccount
       self_and_descendants.sum(&:balance)
     end
 
+    def enforce_normal_balance_sign?
+      !allow_contra_balance
+    end
+
     def parent_select_options
       self.class.where(holder:).where.not(id: self_and_descendants.pluck(:id).compact_blank).tree_ordered.map do |acct|
         [acct.display_label, acct.id]
@@ -130,6 +134,14 @@ module OmniAccount
       def clear_level_cache
         @level = nil
         children.each(&:clear_level_cache)
+      end
+
+      def debit_balance_sign_enforced?
+        debit? && enforce_normal_balance_sign?
+      end
+
+      def credit_balance_sign_enforced?
+        credit? && enforce_normal_balance_sign?
       end
   end
 end

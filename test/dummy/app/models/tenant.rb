@@ -1,3 +1,3 @@
 class Tenant < ApplicationRecord
-  include OmniAccount
+  include OmniAccount::Accountable
 end

@@ -53,6 +53,26 @@ module OmniAccount
       assert_equal "assets_cash", child.display_name
     end
 
+    test "debit account disallows negative balance by default" do
+      account = build(:account, normal_balance: :debit, balance: -1, allow_contra_balance: nil)
+
+      assert_not account.valid?
+      assert_includes account.errors[:balance], "must be greater than or equal to 0"
+    end
+
+    test "credit account disallows positive balance by default" do
+      account = build(:account, normal_balance: :credit, balance: 1, allow_contra_balance: nil)
+
+      assert_not account.valid?
+      assert_includes account.errors[:balance], "must be less than or equal to 0"
+    end
+
+    test "debit account allows contra balance when explicitly enabled" do
+      account = create(:account, normal_balance: :debit, balance: -1, allow_contra_balance: true)
+
+      assert_predicate account, :persisted?
+    end
+
     # codable
     test "code can be nil" do
       account = create(:account, code: nil)
