@@ -35,7 +35,7 @@ zh-CN:
         cash: "资金账户"
         deduct: "服务计费账户"
         billing: "计费账户"
-        ec_income: "电商代收"
+        ec_income: "电商账户"
         ec_refund: "电商退款"
         ec_commission: "电商佣金"
         ec_promotion: "推广佣金"

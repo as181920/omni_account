@@ -35,7 +35,7 @@ en:
         cash: "Cash"
         deduct: "Fee"
         billing: "Billing"
-        ec_income: "EcIncome"
+        ec_income: "E-commerce account"
         ec_refund: "EcRefund"
         ec_commission: "EcCommission"
         ec_promotion: "EcPromotion"
