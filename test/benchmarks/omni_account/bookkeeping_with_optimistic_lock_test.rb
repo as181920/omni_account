@@ -4,6 +4,10 @@ require "benchmark"
 module OmniAccount
   class BookkeepingPerformanceWithOptimisticLoctTest < ActiveSupport::TestCase
     setup do
+      skip "Set RUN_OMNI_ACCOUNT_BENCHMARKS=1 to run benchmarks" unless ENV["RUN_OMNI_ACCOUNT_BENCHMARKS"] == "1"
+    end
+
+    setup do
       @credit_account = create(:account, normal_balance: :credit)
       @debit_accounts = 5.times.map { create(:account) }
     end

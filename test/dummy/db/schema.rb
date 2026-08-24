@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_08_091000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_24_130000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "omni_account_accounts", force: :cascade do |t|
     t.boolean "allow_contra_balance"
-    t.decimal "balance", precision: 12, scale: 2, default: "0.0", null: false
+    t.decimal "balance", precision: 18, scale: 2, default: "0.0", null: false
     t.string "code"
     t.datetime "created_at", precision: nil, null: false
     t.text "description"
@@ -43,8 +43,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_08_091000) do
 
   create_table "omni_account_postings", force: :cascade do |t|
     t.bigint "account_id"
-    t.decimal "amount", precision: 12, scale: 2, null: false
-    t.decimal "balance", precision: 12, scale: 2, null: false
+    t.decimal "amount", precision: 18, scale: 2, null: false
+    t.decimal "balance", precision: 18, scale: 2, null: false
     t.datetime "created_at", precision: nil, null: false
     t.text "description"
     t.bigint "entry_id"

@@ -1,5 +1,5 @@
 # OmniAccount
-通用账户功能(Rails engine)
+通用账户功能（Rails engine）。当前基线为 Rails 8.1；账户余额和分录发生额统一使用 `decimal(18,2)`。
 
 ## Usage
 
@@ -7,7 +7,7 @@
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'omni_account', git: "git@github.com:as181920/omni_account.git", branch: "master"
+gem "omni_account", git: "git@github.com:as181920/omni_account.git", branch: "master"
 ```
 
 And then execute:

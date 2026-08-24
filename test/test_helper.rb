@@ -19,6 +19,7 @@ if ActiveSupport::TestCase.respond_to?(:fixture_paths=)
 end
 
 require "minitest/reporters"
+Minitest.load :minitest_reporter
 Minitest::Reporters.use!
 
 require "factory_bot_rails"

@@ -68,6 +68,22 @@ module OmniAccount
       assert_equal(-1.to_d, contra_debit_account.reload.balance)
     end
 
+    test "posts amounts beyond the former twelve digit precision" do
+      amount = 10_000_000_000.to_d
+
+      OmniAccount::BookkeepingService.new(
+        [
+          [@credit_account, -amount, "large credit"],
+          [@debit_account, amount, "large debit"]
+        ],
+        @debit_account
+      ).perform
+
+      assert_equal amount, @debit_account.reload.balance
+      assert_equal(-amount, @credit_account.reload.balance)
+      assert_equal [amount, -amount].sort, OmniAccount::Posting.last(2).map(&:amount).sort
+    end
+
     test "concurrently transactions result in original balance" do
       OmniAccount::BookkeepingService.new([[@credit_account, -10000], [@debit_account, 10000]], @credit_account).perform
 
@@ -82,22 +98,34 @@ module OmniAccount
       assert_equal 0, OmniAccount::Account.sum(:balance)
     end
 
-    test "concurrently create postings for one account result in raise exception" do
+    # A concurrent request may either serialize successfully or lose the posting-chain race and be rolled back.
+    # These assertions intentionally verify each persisted money invariant separately.
+    # rubocop:disable Minitest/MultipleAssertions
+    test "concurrent postings preserve balanced linear account histories" do
+      results = nil
       capture_io do
         barrier = Concurrent::CyclicBarrier.new(2)
-        assert_raises ActiveRecord::RecordNotUnique, PG::UniqueViolation do
-          OmniAccount::Account.transaction do
-            threads = 2.times.map do
-              Thread.new do
-                barrier.wait
-                OmniAccount::BookkeepingService.new([[@credit_account, -1], [@debit_account, 1]], @credit_account).perform
-              end
-            end
-            threads.each(&:join)
+        results = 2.times.map do
+          Thread.new do
+            barrier.wait
+            OmniAccount::BookkeepingService.new([[@credit_account, -1], [@debit_account, 1]], @credit_account).perform
+            :success
+          rescue ActiveRecord::RecordNotUnique, PG::UniqueViolation => error
+            error
           end
-        end
+        end.map(&:value)
       end
+
+      successes = results.count(:success)
+
+      assert_includes [1, 2], successes
+      assert results.reject { |result| result == :success }.all? { |error| error.is_a?(ActiveRecord::RecordNotUnique) }
+      assert_equal(-successes, @credit_account.reload.balance)
+      assert_equal successes, @debit_account.reload.balance
       assert_equal 0, OmniAccount::Account.sum(:balance)
+      assert_equal successes, @credit_account.postings.count
+      assert_equal successes, @debit_account.postings.count
     end
+    # rubocop:enable Minitest/MultipleAssertions
   end
 end
