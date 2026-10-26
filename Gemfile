@@ -1,4 +1,6 @@
 source "https://rubygems.org"
+
+ruby "4.0.9"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gemspec
